@@ -127,43 +127,51 @@ $(document).ready(function () {
 <div id="analysis" class="section level1">
 <h1>Analysis</h1>
 <p>In first exercise I had to read a table and describe it briefly. That wasn’t much of a struggle. The second exercise I was supposed to show graphically an overview of the data. I chose to display the data in respect of exam points. So far it has been straightforward. Next I had to use linear regression and intepret results. It was kind of interesting and I had to refresh my memory about student’s t-test. Next one was hard. Explaining somewhat trivial stuff is always really difficult. Maybe it helps to something. Finally we had to plot our results. Thanks to datacamp I was able to fit all graphics into same plot. That was cool. Explaining the results were different kind of hard, because of the time pressure, not fully understanding what assumptions I had to explain and interpret.</p>
-<p>Code: library(dplyr) library(ggplot2) students2014 &lt;- read.table(“<a href="http://s3.amazonaws.com/assets.datacamp.com/production/course_2218/datasets/learning2014.txt" class="uri">http://s3.amazonaws.com/assets.datacamp.com/production/course_2218/datasets/learning2014.txt</a>”, sep=“,”, header=TRUE) students2014</p>
-</div>
-<div id="theres-7-variables-and-166-observations.-it-tells-aswerers-genderage-global-attitude-towards-statistics-deep-learning" class="section level1">
-<h1>There’s 7 variables and 166 observations. It tells aswerers gender,age, global attitude towards statistics, deep learning,</h1>
-</div>
-<div id="strategic-learning-surface-learning-and-exam-points." class="section level1">
-<h1>strategic learning, surface learning and exam points.</h1>
-<p>p1&lt;-ggplot(students2014, aes(y = stra,x=points))+ geom_point() p2&lt;-ggplot(students2014, aes(y = surf,x=points))+ geom_point() p3&lt;-ggplot(students2014, aes(y = deep,x=points))+ geom_point() p4&lt;-ggplot(students2014, aes(y = age,x=points))+ geom_point() p5&lt;-ggplot(students2014, aes(y = gender,x=points))+ geom_point() p6&lt;-ggplot(students2014, aes(y = attitude,x=points))+ geom_point() p1 p2 p3 p4 p5 p6</p>
-</div>
-<div id="the-clearest-correlation-is-between-attitude-and-exam-points-otherwise-the-correlation-is-small-or-nonexistent." class="section level1">
-<h1>The clearest correlation is between attitude and exam points, otherwise the correlation is small or nonexistent.</h1>
-<p>fit &lt;- lm(points ~ attitude + stra + age, data = students2014) summary(fit) #There’s correlation between exam points and all of the above variables if we use 90% confidence interval.</p>
-</div>
-<div id="clearly-good-attitude-attitude-yields-better-exam-results-strategic-thinking-is-helpful-in-studying-and-young-people" class="section level1">
-<h1>Clearly good attitude attitude yields better exam results, strategic thinking is helpful in studying and young people</h1>
-</div>
-<div id="have-access-fresher-brains." class="section level1">
-<h1>have access fresher brains.</h1>
-</div>
-<div id="everything-is-from-top-to-bottom" class="section level1">
-<h1>Everything is from top to bottom</h1>
-</div>
-<div id="coefficients-esimate-value-of-alpha-beta1-beta2-beta3-in-linear-regression" class="section level1">
-<h1>coefficients: Esimate: value of alpha, beta1, beta2, beta3 in linear regression</h1>
-</div>
-<div id="std-is-the-error-term" class="section level1">
-<h1>: std is the error term</h1>
-</div>
-<div id="t-value-is-the-t-value-for-the-variable" class="section level1">
-<h1>: t-value is the t-value for the variable</h1>
-</div>
-<div id="prt-is-the-probability-of-the-variable-being-greater-than-absolute-value-of-critical-t-value" class="section level1">
-<h1>: Pr(&gt;|t|) is the probability of the variable being greater than absolute value of critical t-value</h1>
-</div>
-<div id="for-a-certain-confidence-level." class="section level1">
-<h1>for a certain confidence level.</h1>
-<p>fit &lt;- lm(points ~ attitude + stra+age, data = students2014) par(mfrow = c(2,2)) plot(fit, which = c(1,2,5)) #Linear regression assumes that there’s a linear correlation between the lefthand term (in this case points) #and the righthand terms (in this case attitude, strategic learning and age) and assumes that there’s an error term #which can be interpret as random noise or something that’s not taken into account on questionaire. #Each of the explanatory variable has coefficient that we try to find. #Residuals vs Fitted and Residuals vs Leverage seem random and Normal Q-Q seems like there’s a clear correlation.</p>
+<p>Code:</p>
+<pre><code>library(dplyr)
+library(ggplot2)
+students2014 &lt;- read.table(&quot;http://s3.amazonaws.com/assets.datacamp.com/production/course_2218/datasets/learning2014.txt&quot;, sep=&quot;,&quot;, header=TRUE)
+students2014
+
+#There's 7 variables and 166 observations. It tells aswerers gender,age, global attitude towards statistics, deep learning,
+#strategic learning, surface learning and exam points.
+
+p1&lt;-ggplot(students2014, aes(y = stra,x=points))+ geom_point()
+p2&lt;-ggplot(students2014, aes(y = surf,x=points))+ geom_point()
+p3&lt;-ggplot(students2014, aes(y = deep,x=points))+ geom_point()
+p4&lt;-ggplot(students2014, aes(y = age,x=points))+ geom_point()
+p5&lt;-ggplot(students2014, aes(y = gender,x=points))+ geom_point()
+p6&lt;-ggplot(students2014, aes(y = attitude,x=points))+ geom_point()
+p1
+p2
+p3
+p4
+p5
+p6
+
+#The clearest correlation is between attitude and exam points, otherwise the correlation is small or nonexistent.
+
+fit &lt;- lm(points ~ attitude + stra + age, data = students2014)
+summary(fit)
+#There's correlation between exam points and all of the above variables if we use 90% confidence interval. 
+
+#Clearly good attitude attitude yields better exam results, strategic thinking is helpful in studying and young people 
+#have access fresher brains.
+#Everything is from top to bottom
+#coefficients: Esimate: value of alpha, beta1, beta2, beta3 in linear regression
+#            : std is the error term
+#            : t-value is the t-value for the variable
+#            : Pr(&gt;|t|) is the probability of the variable being greater than absolute value of critical t-value
+# for a certain confidence level.
+
+fit &lt;- lm(points ~ attitude + stra+age, data = students2014)
+par(mfrow = c(2,2))
+plot(fit, which = c(1,2,5))
+#Linear regression assumes that there's a linear correlation between the lefthand term (in this case points)
+#and the righthand terms (in this case attitude, strategic learning and age) and assumes that there's an error term
+#which can be interpret as random noise or something that's not taken into account on questionaire.
+#Each of the explanatory variable has coefficient that we try to find.
+#Residuals vs Fitted and Residuals vs Leverage seem random and Normal Q-Q seems like there's a clear correlation.</code></pre>
 </div>
 
 

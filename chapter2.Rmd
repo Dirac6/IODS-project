@@ -6,6 +6,7 @@ So far it has been straightforward. Next I had to use linear regression and inte
 
 
 Code:
+```
 library(dplyr)
 library(ggplot2)
 students2014 <- read.table("http://s3.amazonaws.com/assets.datacamp.com/production/course_2218/datasets/learning2014.txt", sep=",", header=TRUE)
@@ -50,3 +51,4 @@ plot(fit, which = c(1,2,5))
 #which can be interpret as random noise or something that's not taken into account on questionaire.
 #Each of the explanatory variable has coefficient that we try to find.
 #Residuals vs Fitted and Residuals vs Leverage seem random and Normal Q-Q seems like there's a clear correlation.
+```

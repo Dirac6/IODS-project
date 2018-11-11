@@ -2,7 +2,12 @@
 
 In first exercise I had to read a table and describe it briefly. That wasn't much of a struggle. The second exercise I
 was supposed to show graphically an overview of the data. I chose to display the data in respect of exam points.
-So far it has been straightforward. Next I had to use linear regression and intepret results. It was kind of interesting and I had to refresh my memory about student's t-test. Next one was hard. Explaining somewhat trivial stuff is always really difficult. Maybe it helps to something. Finally we had to plot our results. Thanks to datacamp I was able to fit all graphics into same plot. That was cool. Explaining the results were different kind of hard, because of the time pressure, not fully understanding what assumptions I had to explain and interpret.
+So far it has been straightforward. Next I had to use linear regression and intepret results. It was kind of
+interesting and I had to refresh my memory about student's t-test. Next one was hard. Explaining somewhat trivial stuff
+is always really difficult. Maybe it helps to something. Finally we had to plot our results. Thanks to datacamp I was
+able to fit all graphics into same plot. That was cool. Explaining the results were different kind of hard, because of
+the time pressure, not fully understanding what assumptions I had to explain and interpret.
+
 
 
 Code:

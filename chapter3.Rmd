@@ -1,0 +1,108 @@
+---
+title: "Chapter3"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+## Chapter 3 - Analysis
+
+First I read the data from data wrangling part.
+```{r}
+library(tidyr)
+library(dplyr)
+library(ggplot2)
+setwd("d:/koulujutut/opendata/iods-project/data/")
+alc<-read.table("alc.csv",header=TRUE,sep=",")
+colnames(alc)
+```
+It gives some basic info about the students. More information about the data here: https://archive.ics.uci.edu/ml/datasets/Student+Performance.
+
+Now we want to see if there's a connection between alcohol consumption and other variables. I'm looking into 4 variables: romantic, health, G3 and studytime. My hypothesis is that high alcohol consumption decreases the odds to get into romantic relationship, lowers health, takes time off studying, but makes it more effective, i.e. final grade compared to study time is higher, but overall final grades are lower, because the lowest final exam scores probably are from very the highest consumers.
+
+```{r}
+columns<-c("romantic","studytime","health","G3","high_use")
+data <- select(alc,one_of(columns))
+ggplot
+```
+For numeric evaluation, I'll start with constructing two subtables of table alc: Low alcohol users and high alcohol users. 
+```{r}
+LU<-subset(data,data$high_use=="FALSE")
+HU<-subset(data,data$high_use=="TRUE")
+```
+Now I calculate the means for each numeric variable for students with the two levels of consumption and for romantic relationship the percent of students that are in romantic relationship.
+```{r}
+mean(LU$G3)
+mean(HU$G3)
+mean(LU$health)
+mean(HU$health)
+mean(LU$G3)
+mean(HU$G3)
+mean(LU$G3)
+mean(HU$G3)
+sum(LU$romantic=="yes")/sum(LU$romantic=="no")
+sum(HU$romantic=="yes")/sum(HU$romantic=="no")
+```
+
+Graphics for high consumption
+
+```{r}
+gather(HU) %>% ggplot(aes(value)) + facet_wrap("key", scales = "free") + geom_bar()
+```
+
+Graphics for low consumption
+
+```{r}
+gather(LU) %>% ggplot(aes(value)) + facet_wrap("key", scales = "free") + geom_bar()
+```
+
+My hypothesis was wrong about health, and it seems that heavy alcohol consumption increases health. Otherwise hypothesis' were correct.
+
+```{r}
+a<-glm(high_use ~ health + G3 + studytime+romantic, data = alc, family = "binomial")
+summary(a)
+```
+
+We see that the only statistically significant result is study time decreasing when alcohol consumption increases.
+
+```{r}
+coef(a)
+```
+
+We get odds ratios by using the coefficients as exponent. 
+
+```{r}
+exp(summary(a)$coefficients[,1])
+```
+and lower bounds for 95% condidence interval using standard error and correct values for normal distribution.
+```{r}
+exp((summary(a)$coefficients[,1])+summary(a)$coefficients[,2]*qnorm(0.025))
+```
+
+Similiarly upper bounds.
+```{r}
+exp((summary(a)$coefficients[,1])+summary(a)$coefficients[,2]*qnorm(0.975))
+```
+
+We once again see that only study time has it's whole 95% confidence interval below/over 1 and it's the only statistically significant result.
+
+```{r}
+m <- glm(high_use ~ studytime, data = alc, family = "binomial")
+probabilities <- predict(m, type = "response")
+alc <- mutate(alc, probability = probabilities)
+alc <- mutate(alc, prediction = probability > 0.5)
+select(alc, studytime, high_use, probability, prediction) %>% tail(10)
+table(high_use = alc$high_use, prediction = alc$prediction)
+```
+It seems that my model is retarded and assumes that no one consumes alcohol.
+
+```{r}
+loss_func <- function(class, prob) {
+  n_wrong <- abs(class - prob) > 0.5
+  mean(n_wrong)
+}
+loss_func(class = alc$high_use, prob = alc$probability)
+```
+
+My model is a very simple guessing strategy, so it performs like one.

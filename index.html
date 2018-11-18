@@ -222,13 +222,14 @@ library(dplyr)</code></pre>
 setwd(&quot;d:/koulujutut/opendata/iods-project/data/&quot;)
 alc&lt;-read.table(&quot;alc.csv&quot;,header=TRUE,sep=&quot;,&quot;)
 colnames(alc)</code></pre>
-<pre><code>##  [1] &quot;school&quot;     &quot;sex&quot;        &quot;age&quot;        &quot;address&quot;    &quot;famsize&quot;   
-##  [6] &quot;Pstatus&quot;    &quot;Medu&quot;       &quot;Fedu&quot;       &quot;Mjob&quot;       &quot;Fjob&quot;      
-## [11] &quot;reason&quot;     &quot;nursery&quot;    &quot;internet&quot;   &quot;guardian&quot;   &quot;traveltime&quot;
-## [16] &quot;studytime&quot;  &quot;failures&quot;   &quot;schoolsup&quot;  &quot;famsup&quot;     &quot;paid&quot;      
-## [21] &quot;activities&quot; &quot;higher&quot;     &quot;romantic&quot;   &quot;famrel&quot;     &quot;freetime&quot;  
-## [26] &quot;goout&quot;      &quot;Dalc&quot;       &quot;Walc&quot;       &quot;health&quot;     &quot;absences&quot;  
-## [31] &quot;G1&quot;         &quot;G2&quot;         &quot;G3&quot;         &quot;alc_use&quot;    &quot;high_use&quot;</code></pre>
+<pre><code>##  [1] &quot;school&quot;      &quot;sex&quot;         &quot;age&quot;         &quot;address&quot;     &quot;famsize&quot;    
+##  [6] &quot;Pstatus&quot;     &quot;Medu&quot;        &quot;Fedu&quot;        &quot;Mjob&quot;        &quot;Fjob&quot;       
+## [11] &quot;reason&quot;      &quot;nursery&quot;     &quot;internet&quot;    &quot;guardian&quot;    &quot;traveltime&quot; 
+## [16] &quot;studytime&quot;   &quot;failures&quot;    &quot;schoolsup&quot;   &quot;famsup&quot;      &quot;paid&quot;       
+## [21] &quot;activities&quot;  &quot;higher&quot;      &quot;romantic&quot;    &quot;famrel&quot;      &quot;freetime&quot;   
+## [26] &quot;goout&quot;       &quot;Dalc&quot;        &quot;Walc&quot;        &quot;health&quot;      &quot;absences&quot;   
+## [31] &quot;G1&quot;          &quot;G2&quot;          &quot;G3&quot;          &quot;alc_use&quot;     &quot;high_use&quot;   
+## [36] &quot;probability&quot; &quot;prediction&quot;</code></pre>
 <p>It gives some basic info about the students. More information about the data here: <a href="https://archive.ics.uci.edu/ml/datasets/Student+Performance" class="uri">https://archive.ics.uci.edu/ml/datasets/Student+Performance</a>.</p>
 <p>Now we want to see if there’s a connection between alcohol consumption and other variables. I’m looking into 4 variables: romantic, health, G3 and studytime. My hypothesis is that high alcohol consumption decreases the odds to get into romantic relationship, lowers health, takes time off studying, but makes it more effective, i.e. final grade compared to study time is higher, but overall final grades are lower, because the lowest final exam scores probably are from very the highest consumers.</p>
 <pre class="r"><code>columns&lt;-c(&quot;romantic&quot;,&quot;studytime&quot;,&quot;health&quot;,&quot;G3&quot;,&quot;high_use&quot;)
@@ -238,7 +239,7 @@ ggplot</code></pre>
 ## {
 ##     UseMethod(&quot;ggplot&quot;)
 ## }
-## &lt;bytecode: 0x000000001c84f358&gt;
+## &lt;bytecode: 0x000000001c85d438&gt;
 ## &lt;environment: namespace:ggplot2&gt;</code></pre>
 <p>For numeric evaluation, I’ll start with constructing two subtables of table alc: Low alcohol users and high alcohol users.</p>
 <pre class="r"><code>LU&lt;-subset(data,data$high_use==&quot;FALSE&quot;)

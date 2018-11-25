@@ -3,6 +3,7 @@ title: "Chapter4"
 output: html_document
 ---
 ## Chapter 4 - Analysis
+
 ```{r}
 library(dplyr)
 library(MASS)
@@ -13,6 +14,7 @@ data("Boston")
 str(Boston)
 dim(Boston)
 ```
+
 Data frame contains the following columns:
 
 crim - per capita crime rate by town.

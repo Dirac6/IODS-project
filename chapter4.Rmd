@@ -1,0 +1,126 @@
+---
+title: "Chapter4"
+output: html_document
+---
+## Chapter 4 - Analysis
+```{r}
+library(dplyr)
+library(MASS)
+library(tidyr)
+library(ggplot2)
+library(corrplot)
+data("Boston")
+str(Boston)
+dim(Boston)
+```
+Data frame contains the following columns:
+
+crim - per capita crime rate by town.
+
+
+zn - proportion of residential land zoned for lots over 25,000 sq.ft.
+
+
+indus - proportion of non-retail business acres per town.
+
+
+chas - Charles River dummy variable (= 1 if tract bounds river; 0 otherwise).
+
+
+nox - nitrogen oxides concentration (parts per 10 million).
+
+
+rm - average number of rooms per dwelling.
+
+
+age - proportion of owner-occupied units built prior to 1940.
+
+
+dis - weighted mean of distances to five Boston employment centres.
+
+
+rad - index of accessibility to radial highways.
+
+
+tax - full-value property-tax rate per $10,000.
+
+
+ptratio - pupil-teacher ratio by town.
+
+
+black - 1000(Bk - 0.63)^2 where Bk is the proportion of blacks by town.
+
+
+lstat - lower status of the population (percent).
+
+
+medv - median value of owner-occupied homes in $1000s.
+
+```{r}
+summary(Boston)
+pairs(Boston)
+cor_matrix<-cor(Boston) %>% round(digits = 2)
+corrplot(cor_matrix, method="circle", type="upper", cl.pos="b", tl.pos="d", tl.cex = 0.6)
+```
+
+
+When using 0.7 as the value for strong correlation we get that: Proportion of non-retail business acres per town has strong positive correlation with nitrogen oxides concentration and full-value property-tax rate, but a strong negative correlation with weighted mean of distances to five Boston employment centres.
+Nitrogen oxides concentration has strong positive correlation with the proportion of owner-occupied units built prior to 1940 and strong negative correlation with weighted mean of distances to five Boston employment centres.
+Average number of rooms per dwelling has strong positive correlation with median value of owner-occupied homes.
+Proportion of owner-occupied units built prior to 1940 has strong negative correlation with weighted mean of distances to five Boston employment centres. 
+Accessibility to radial highways has strong positive correlation with full-value property-tax rate.
+Lower status of the population has strong negative correlation with median value of owner-occupied homes
+```{r}
+boston_scaled <- scale(Boston)
+boston_scaled <- as.data.frame(boston_scaled)
+summary(boston_scaled)
+```
+
+Obviously all the means are now zeroes so the variables are harder to interpret.
+
+```{r}
+bins <- quantile(boston_scaled$crim)
+bins
+crime <- cut(boston_scaled$crim, breaks = bins, include.lowest = TRUE, labels = c("low", "med_low", "med_high", "high"))
+boston_scaled <- dplyr::select(boston_scaled, -crim)
+boston_scaled <- data.frame(boston_scaled, crime)
+n <- nrow(boston_scaled)
+ind <- sample(n,  size = n * 0.8)
+train <- boston_scaled[ind,]
+test <- boston_scaled[-ind,]
+```
+Now we fit linear discriminant analysis on the train set and draw it.
+```{r}
+lda.fit <- lda(crime ~ ., data = train)
+classes <- as.numeric(train$crime)
+plot(lda.fit, dimen = 2, col = classes, pch = classes)
+```
+Now we save and remove the crime categories from the test set and crosstabulate the predictions with the correct classes.
+```{r}
+correct_classes <- test$crime
+test <- dplyr::select(test, -crime)
+lda.pred <- predict(lda.fit, newdata = test)
+table(correct = correct_classes, predicted = lda.pred$class)
+```
+
+The model predicts the classes really well. With high crime the model's prediction is flawless and for medium high crime rates the prediction is almost perfect.
+
+```{r}
+data('Boston')
+reload<-scale(Boston)
+dist_re<-dist(reload)
+summary(dist_re)
+set.seed(123)
+k_max <- 10
+twcss <- sapply(1:k_max, function(k){kmeans(reload, k)$tot.withinss})
+qplot(x = 1:k_max, y = twcss, geom = 'line')
+```
+
+It seems that 2 clusters is optimal.
+
+```{r}
+km <-kmeans(reload, centers = 2)
+pairs(reload, col = km$cluster)
+```
+
+It seems that the same variables that had strong correlations pop-out. Mainly nitrogen oxides concentration and proportion of non-retail business acres per town. The link between proportion of non-retail business acres per town and lower status of the population is something that wasn't as clear as it is clustered. It had clear negative correlation, but the clustering shows that when percent of low status people is high there's next to none business acres.

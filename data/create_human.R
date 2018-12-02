@@ -1,4 +1,5 @@
 library(dplyr)
+library(stringr)
 hd <- read.csv("http://s3.amazonaws.com/assets.datacamp.com/production/course_2218/datasets/human_development.csv", stringsAsFactors = F)
 gii <- read.csv("http://s3.amazonaws.com/assets.datacamp.com/production/course_2218/datasets/gender_inequality.csv", stringsAsFactors = F, na.strings = "..")
 dim(hd)
@@ -14,4 +15,35 @@ gii<-mutate(gii, rLab = LabF/LabM)
 human<- inner_join(gii,hd, by = "country", suffix = c(".gii", ".hd"))
 setwd("d:/koulujutut/opendata/iods-project/data/")
 write.table(human,file="human.csv",sep = ",")
-test<-read.csv("human.csv",sep = ",",header = TRUE)
+names(human)
+str(human)
+summary(human)
+#GII - Gender Inequality Index
+#MMR - Maternal Mortality Ratio
+#Birth - Adolescent Birth Rate
+#Parliament - Percent Representation in Parliament
+#Edu2F - Population with Secondary Education Female
+#Edu2M - Population with Secondary Education Male
+#LabF - Labour Force Participation Rate Female
+#LabM - Labour Force Participation Rate Male
+#rEdu2 - Ratio of Female and Male populations of secondary education
+#rLab - Ratio of Female and Male populations of labour foce participation
+#rank.hd - Rank by HDI
+#HDI - Human Development Index
+#LE - Life Expectancy at birth
+#EYoE - Expected years of education
+#MYoE - Mean years of education
+#GNI - Gross National Income
+#GNImHDI - GNI per capira rank minus HDI rank
+
+str_replace(human$GNI, pattern=",", replace ="") %>% as.numeric
+
+keep <- c("country", "Edu2F", "LabM", "LE", "EYoE", "GNI", "MMR", "Birth", "Parliament")
+human <- select(human, one_of(keep))
+data.frame(human[-1], comp = complete.cases(human))
+human <- filter(human, complete.cases(human))
+last <- nrow(human) - 7
+human <- human[1:last, ]
+rownames(human) <- human$country
+keep <- c("Edu2F", "LabM", "LE", "EYoE", "GNI", "MMR", "Birth", "Parliament")
+human <- select(human, one_of(keep))

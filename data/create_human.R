@@ -45,6 +45,5 @@ human <- filter(human, complete.cases(human))
 last <- nrow(human) - 7
 human <- human[1:last, ]
 rownames(human) <- human$country
-keep <- c("Edu2F", "LabM", "LE", "EYoE", "GNI", "MMR", "Birth", "Parliament")
-human <- select(human, one_of(keep))
+human_ <- select(human, -country)
 write.table(human,file="human.csv",sep = ",")

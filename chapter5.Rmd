@@ -1,0 +1,14 @@
+---
+title: "Chapter5"
+output: html_document
+---
+```{r}
+library(GGally)
+library(dplyr)
+library(corrplot)
+human<-read.csv("https://raw.githubusercontent.com/Dirac6/IODS-project/master/data/human.csv", stringsAsFactors = F)
+summary(human)
+human_std <- scale(human)
+pca_human <- prcomp(human_std)
+biplot(pca_human, choices = 1:2, cex = c(0.8, 1), col = c("grey40", "deeppink2"))
+```

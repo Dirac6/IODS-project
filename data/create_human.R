@@ -47,3 +47,4 @@ human <- human[1:last, ]
 rownames(human) <- human$country
 keep <- c("Edu2F", "LabM", "LE", "EYoE", "GNI", "MMR", "Birth", "Parliament")
 human <- select(human, one_of(keep))
+write.table(human,file="human.csv",sep = ",")

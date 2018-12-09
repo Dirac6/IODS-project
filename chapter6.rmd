@@ -1,0 +1,13 @@
+---
+title: "Chapter6"
+output: html_document
+---
+## Chapter 6 - Analysis
+
+```{r}
+library(ggplot2)
+setwd("d:/koulujutut/opendata/iods-project/data/")
+RATS<-read.table("RATS_long.txt",sep = " ")
+BRBS<-read.table("BRBS_long.txt",sep = " ")
+pairs(RATS)
+```
